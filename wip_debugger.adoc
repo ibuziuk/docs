@@ -6,27 +6,53 @@ There is an epic bugzilla for this task:
  
  - https://bugs.eclipse.org/bugs/show_bug.cgi?id=486065[Bug 486065] / https://issues.jboss.org/browse/ERT-48[ERT-48] *Support Chromium based browser debugging*. 
 
-Basically, this^ issue can be devided into two major parts: 
+Basically, this issue can be devided into two major parts: 
 
-- *Debugger* (Everyting that is connected with Web Inspector Protocol support / parsers / source mapping etc.)
+- *Debugger* (Web Inspector Protocol support / parsers / source mapping / hot swap / live edit etc.)
 
-- *Using Chrome / Chromium browser As Runtime* - https://bugs.eclipse.org/bugs/show_bug.cgi?id=497765[Bug 497765]
+- *Browser* (Launching Chrome / Cromium browser from Eclipse with parameters like `--remote-debugging-port`)
 
-The idea is to have smth. similar that has been already implemented for Node.js Debugger:
+The idea is to have something similar that has been already implemented for *Node.js* Debugger:
 
-- Add *Chromium / Chrome Runtime* similar to *Node.js Runtime*:
+- Add *Chrome / Chromium Runtime* similar to *Node.js Runtime*:
 
 image::images/front-end-debugger/Node.js_Runtime_Preferences_1_small.png[Node.js Runtime Preferences]
 
-- Add launch shortcut (smth. like Debug Front-End) enabled on html files (file protocol) and Server Adapters (http / https)
+- Add launch shortcut (*Debug Front-End / Debug via Chromium*) enabled on html files (file protocol) and Server Adapters (http / https protocols)
 
-- Launch configuration should run *Chrome / Chromium Runtime* with `--remote-debugging-port` and `'www.example.com'` (start page parameter) + launch WIP debugger for connecting to debug port
+- Launch configuration should:
+1. launch *Chrome / Chromium Runtime* with `--remote-debugging-port` and `'www.example.com'` (start page)
+2. launch *WIP* debugger for connecting to debug port 
+
+This is very similar approach that is already used in *Node.js* tools (launching Node.js app in debug mode + launching standalone V8 VM)
+
+- *WIP* debugger should be adjusted to JSDT in order to support automatic source lookup, live edit etc. OOTB
+
+
+== Issue targeted for Neon.1 with estimations
+
+- https://bugs.eclipse.org/bugs/show_bug.cgi?id=497765[Bug 497765 - Need to add Chromium / Chrome Runtime for front-end Debugging] ~ 30h
+
+- https://bugs.eclipse.org/bugs/show_bug.cgi?id=497853[Bug 497853 - Need to create launch shortcut for opening html files in chrome / chromium browser with debug port enabled] ~ 15h
+
+- https://bugs.eclipse.org/bugs/show_bug.cgi?id=497854[Bug 497854 - Need to enable Chrome / Chromium launch shortcut on server adapters] ~ 30h
+
+- https://bugs.eclipse.org/bugs/show_bug.cgi?id=497855[Bug 497855 - Need to automate source lookup detection for front-end debugging] ~ 25h
+
+- https://bugs.eclipse.org/bugs/show_bug.cgi?id=497856[Bug 497856 - Need to implement hot swap / live edit support for front-end debugging] ~ 25h
+
+*Total: ~ 125h* 
 
 == Potential problems
 
-- how to detect start url if server was launched without using server adapters (Node.js app / gulp / grunt)
+- Detection of start url if server was launched without using server adapters (Node.js app / gulp / grunt)
 
+- `chromium-browser --remote-debugging-port=9222` is not working (at least with Version 51.0.2704.79 Ubuntu 16.04) if chromium is already running. 
+
+- Need to investigate https://chrome.google.com/webstore/detail/netbeans-connector/hafdlehgocfcodbgjnpecfajgkeejnaa/related?hl=en[NetBeans Connector] extension. This might help to tackle debugging issues like `--remote-debugging-port=9222` option is 
+not always working
 
 == Additional Information
 
-- https://dl.dropboxusercontent.com/u/19656504/jsdt-debugger.pdf[JSDT Debugger slides] by Denis Golovin - contains information about both `Node.js` (V8) and `front-end` (WIP) debuggers
+- https://dl.dropboxusercontent.com/u/19656504/jsdt-debugger.pdf[Chrome DevTools for Java
+JavaScript Debugger] slides by Denis Golovin with detailed information about `Node.js` (V8) and `front-end` (WIP) debuggers
