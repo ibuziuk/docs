@@ -47,7 +47,9 @@ This is very similar approach that is already used in *Node.js* tools (launching
 
 - Detection of start url if server was launched without using server adapters (Node.js app / gulp / grunt)
 
-- `chromium-browser --remote-debugging-port=9222` is not working (at least with Version 51.0.2704.79 Ubuntu 16.04) if chromium is already running. 
+- ~~`chromium-browser --remote-debugging-port=9222` is not working (at least with Version 51.0.2704.79 Ubuntu 16.04) if chromium is already running~~ 
+
+NOTE: Solution is to add https://www.chromium.org/user-experience/user-data-directory[`--user-data-dir`] parameter in order to force Chrome / Chromium to start a new browser instance, not just a new window
 
 - Need to investigate https://chrome.google.com/webstore/detail/netbeans-connector/hafdlehgocfcodbgjnpecfajgkeejnaa/related?hl=en[NetBeans Connector] extension. This might help to tackle debugging issues like `--remote-debugging-port=9222` option is 
 not always working
