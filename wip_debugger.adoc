@@ -1,6 +1,12 @@
 = JSDT Front-end Debugger
 
-== How to implement Front-end Debugger support ?
+== How JavaScript Debugger works now ?
+
+Here is a short demo https://youtu.be/7oQz1Ja1H08[video] in which step-by-step process of debugging JavaScript via Eclipse JSDT is explained:
+
+video::7oQz1Ja1H08[youtube] 
+
+== How to Automate Front-end Debugger support ?
 
 There is an epic bugzilla for this task: 
  
