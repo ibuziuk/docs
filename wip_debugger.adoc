@@ -62,6 +62,10 @@ NOTE: Solution is to add https://www.chromium.org/user-experience/user-data-dire
 - Need to investigate https://chrome.google.com/webstore/detail/netbeans-connector/hafdlehgocfcodbgjnpecfajgkeejnaa/related?hl=en[NetBeans Connector] extension. This might help to tackle debugging issues like `--remote-debugging-port=9222` option is 
 not always working
 
+== CLI 
+
+`chromium-browser --remote-debugging-port=9222 --user-data-dir=/home/ilya/.jsdt-chromium/`
+
 == Additional Information
 
 - https://dl.dropboxusercontent.com/u/19656504/jsdt-debugger.pdf[Chrome DevTools for Java
