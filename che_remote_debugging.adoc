@@ -1,6 +1,7 @@
 = Eclipse Che -  remote debugging setup
 
-https://eclipse-che.readme.io/docs/[Eclipse Che] has a really huge codebase which consists of a dozen of individual https://github.com/eclipse/che/wiki/Development-Workflow#modules[modules]. Basically, if you work on a separate module it is utterly convenient to have only this particular module imported to the IDE and setup the remote debugging in order to avoid endless builds and issues like `java.lang.OutOfMemoryError: GC overhead limit exceeded`. In this article we are going to setup the remote debugging in Eclipse IDE for https://github.com/eclipse/che/tree/master/wsmaster[wsmaster] component. First thing you need to do is to build the component:
+https://eclipse-che.readme.io/docs/[Eclipse Che] has a really huge codebase which consists of a dozen of individual https://github.com/eclipse/che/wiki/Development-Workflow#modules[modules]. Basically, if you work on a separate module it is utterly convenient to have only this particular module imported to the IDE and setup the remote debugging in order to avoid long-running builds and issues like `java.lang.OutOfMemoryError: GC overhead limit exceeded`. In this article we are going to setup the remote debugging in Eclipse IDE for https://github.com/eclipse/che/tree/master/wsmaster[wsmaster] component. + 
+First thing you need to do is to build the component:
 
 ....
 cd che/wsmaster
@@ -14,31 +15,23 @@ cd che/assembly/assembly-main
 mvn clean install
 ....
 
-The next step is building the *che-launcher* image. Dockerfile for this image is located in a separate https://github.com/eclipse/che-dockerfiles[che-dockerfiles] repository:
-
-....
-cd che-dockerfiles/che-launcher
-docker build -t codenvy/che-launcher .
-....
-
-The final step would be running the *che-launcher* image with several environment variables:
+The final step is running the Eclipse Che launcher image with several environment variables:
 
 |===
 |Variable | Description
 
 |CHE_DEBUG_SERVER
-|The variable for enabling the debug mode
-
-|CHE_DEBUG_SERVER_PORT
-|The remote debugging port
+|The variable for enabling the debug mode. By default port *8000* will be used for JPDA (Java Platform Debugger Architecture)
 
 |CHE_LOCAL_BINARY
 |The path to a Che assembly to be used instead of the binary contained within the *che-server* image
 |===
 
+NOTE: If port *8000* is already in use you can specify other port for debugging via `CHE_DEBUG_SERVER_PORT` environment variable
+
 The command itself looks the following way:
 ....
-docker run -t -v /var/run/docker.sock:/var/run/docker.sock -e "CHE_DEBUG_SERVER=true" -e "CHE_DEBUG_SERVER_PORT=9999" -e "CHE_LOCAL_BINARY=/home/git/che/assembly/assembly-main/target/eclipse-che-5.0.0-M5-SNAPSHOT/eclipse-che-5.0.0-M5-SNAPSHOT" codenvy/che start
+docker run -t -v /var/run/docker.sock:/var/run/docker.sock -e "CHE_DEBUG_SERVER=true" -e "CHE_LOCAL_BINARY=/home/git/che/assembly/assembly-main/target/eclipse-che-5.0.0-M5-SNAPSHOT/eclipse-che-5.0.0-M5-SNAPSHOT" eclipse/che start
 ....
 
 NOTE: `CHE_LOCAL_BINARY` value must be amended with a path to assembly specific to your machine
@@ -51,9 +44,9 @@ image::images/che-remote-debugging/remote_java_app.png[width="740", height="400"
 
 image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", height="420", caption="Debug Configuration"]
 
-NOTE: *Port* value must be the equal to the `CHE_DEBUG_SERVER_PORT` variable specified in the `docker run` command
+NOTE: The *Port* value must be the equal to the `CHE_DEBUG_SERVER_PORT` variable if it was specified in the `docker run` command
 
-Pressing the *Debug* button is the final setup step! For the testing purposes you can now navigate to the  http://localhost:8080/swagger and debug the REST endpoints directly from Eclipse:
+Pressing the *Debug* button is the final IDE setup step! For the testing purposes you can now navigate to the  http://localhost:8080/swagger and debug the REST endpoints directly from Eclipse:
 
 image::images/che-remote-debugging/swagger_cropped.png[width="740", height="550", caption="Eclipse Che Swagger API"]
 
