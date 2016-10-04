@@ -36,7 +36,7 @@ The final step would be running the *che-launcher* image with several environmen
 |The path to a Che assembly to be used instead of the binary contained within the *che-server* image
 |===
 
-The build command itself looks the following way:
+The command itself looks the following way:
 ....
 docker run -t -v /var/run/docker.sock:/var/run/docker.sock -e "CHE_DEBUG_SERVER=true" -e "CHE_DEBUG_SERVER_PORT=9999" -e "CHE_LOCAL_BINARY=/home/git/che/assembly/assembly-main/target/eclipse-che-5.0.0-M5-SNAPSHOT/eclipse-che-5.0.0-M5-SNAPSHOT" codenvy/che start
 ....
@@ -49,7 +49,7 @@ Now it is high time to setup the remote debugging facilities in the Eclipse IDE.
 
 image::images/che-remote-debugging/remote_java_app.png[width="740", height="400", caption="Remote Java Application"]
 
-image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", height="400", caption="Debug Configuration"]
+image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", height="420", caption="Debug Configuration"]
 
 NOTE: *Port* value must be the equal to the `CHE_DEBUG_SERVER_PORT` variable specified in the `docker run` command
 
@@ -57,4 +57,4 @@ Pressing the *Debug* button is the final setup step! For the testing purposes yo
 
 image::images/che-remote-debugging/swagger_cropped.png[width="740", height="550", caption="Eclipse Che Swagger API"]
 
-image::images/che-remote-debugging/eclipse_debug.png[width="740", height="300", caption="Debugging Che Swagger API in Eclipse"]
+image::images/che-remote-debugging/eclipse_debug.png[width="740", height="250", caption="Debugging Che Swagger API in Eclipse"]
