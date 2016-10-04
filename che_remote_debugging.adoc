@@ -1,13 +1,14 @@
 == Eclipse Che: remote debugging setup
 
-Eclipse Che has a huge codebase and sometimes if you work on a separate component it is very convinient to have only this component imported to the IDE. Lets try to setup remote debugging for Eclipse IDE using the https://github.com/ibuziuk/che/tree/master/wsmaster[wsmaster] component as an example. First thing you need to do is building the component:
+https://eclipse-che.readme.io/docs/[Eclipse Che] has a huge codebase which consists of a dozen of https://github.com/eclipse/che/wiki/Development-Workflow#modules[modules]. Basically, if you work on a separate module it is utterly convenient to have only this particular module imported to the IDE and use the remote debugging approach in order to avoid endless builds and issues like `java.lang.OutOfMemoryError: GC overhead limit exceeded`.
+In this article we are going to setup the remote debugging in Eclipse IDE for https://github.com/eclipse/che/tree/master/wsmaster[wsmaster] component as an example. First thing you need to do is to build the component:
 
 ....
 cd che/wsmaster
 mvn clean install
 ....
 
-After that you need to build Che: 
+After that you need to build the Che assembly: 
 
 ....
 cd che/assembly/assembly-main
@@ -27,7 +28,7 @@ The final step would be running the che-launcher with several environment variab
 |Variable | Description
 
 |CHE_DEBUG_SERVER
-|The variable for enabling debug mode
+|The variable for enabling the debug mode
 
 |CHE_DEBUG_SERVER_PORT
 |The remote debugging port
@@ -36,22 +37,25 @@ The final step would be running the che-launcher with several environment variab
 |The path to a Che assembly that is on your host to be used instead of the binary contained within the che-server image
 |===
 
-The command itself looks like this:
+The build command itself looks like this:
 ....
 docker run -t -v /var/run/docker.sock:/var/run/docker.sock -e "CHE_DEBUG_SERVER=true" -e "CHE_DEBUG_SERVER_PORT=9999" -e "CHE_LOCAL_BINARY=/home/git/che/assembly/assembly-main/target/eclipse-che-5.0.0-M5-SNAPSHOT/eclipse-che-5.0.0-M5-SNAPSHOT" codenvy/che start
 ....
 
-NOTE: `CHE_LOCAL_BINARY` path should be ammended for pointing to your che assembly
+NOTE: `CHE_LOCAL_BINARY` value must be amended in order to reflect the path to assembly specific to your machine.
 
-Now it is time to setup Eclipse for remote debugging. Import "wsmaster" as a Maven Project:
+Che is now running on http://localhost:8080/
 
-image::images/che-remote-debugging/remote_che_debug.png[width="740", height="400", caption="Debug"]
+Now it is time to setup Eclipse. First of all, import the *wsmaster* component via *File -> Import...-> Existing Maven Projects*. After that create a new *Remote Java Application* Debug Configuration:
 
-image::images/che-remote-debugging/eclipse_debug.png[width="740", height="400", caption="Debug"]
+image::images/che-remote-debugging/remote_java_app.png[width="740", height="400", caption="Remote Java Application"]
 
-image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", height="400", caption="Debug"]
+image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", height="400", caption="Debug Configuration"]
 
-image::images/che-remote-debugging/remote_java_app.png[width="740", height="400", caption="Debug"]
+NOTE: *port* value must be the equal to the `CHE_DEBUG_SERVER_PORT` variable
 
-image::images/che-remote-debugging/swagger_cropped.png[width="740", height="400", caption="Debug"]
+Congratulations - pressing the "Debug" button is the final IDE setup step! For testing purpose you can navigate to the  http://localhost:8080/swagger/api and debug the REST endpoints directly from Eclipse:
 
+image::images/che-remote-debugging/swagger_cropped.png[width="740", height="500", caption="Debug"]
+
+image::images/che-remote-debugging/eclipse_debug.png[width="740", height="500", caption="Debug"]
