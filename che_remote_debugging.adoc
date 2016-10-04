@@ -53,7 +53,7 @@ image::images/che-remote-debugging/remote_che_debug_arrow.png[width="740", heigh
 
 NOTE: *Port* value must be the equal to the `CHE_DEBUG_SERVER_PORT` variable specified in the `docker run` command
 
-Pressing the *Debug* button is the final setup step! For the testing purposes you can now navigate to the  http://localhost:8080/swagger/api and debug the REST endpoints directly from Eclipse:
+Pressing the *Debug* button is the final setup step! For the testing purposes you can now navigate to the  http://localhost:8080/swagger and debug the REST endpoints directly from Eclipse:
 
 image::images/che-remote-debugging/swagger_cropped.png[width="740", height="550", caption="Eclipse Che Swagger API"]
 
