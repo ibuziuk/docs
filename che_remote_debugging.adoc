@@ -38,7 +38,7 @@ NOTE: `CHE_LOCAL_BINARY` value must be amended with a path to assembly specific 
 
 Congratulations - Che is now running on http://localhost:8080/ in the debug mode!
 
-Now it is high time to setup the remote debugging facilities in the Eclipse IDE. First of all, import the https://github.com/ibuziuk/che/tree/master/wsmaster[wsmaster] component via *File -> Import...-> Existing Maven Projects*. After that create a new *Remote Java Application* Debug Configuration:
+Now it is high time to setup the remote debugging facilities in the Eclipse IDE. First of all, import the https://github.com/eclipse/che/tree/master/wsmaster[wsmaster] component via *File -> Import...-> Existing Maven Projects*. After that create a new *Remote Java Application* Debug Configuration:
 
 image::images/che-remote-debugging/remote_java_app.png[width="740", height="400", caption="Remote Java Application"]
 
