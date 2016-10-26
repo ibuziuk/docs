@@ -11,7 +11,7 @@ mvn clean install
 After that you need to build the Che assembly: 
 
 ....
-cd che/assembly/assembly-main
+cd che/assembly
 mvn clean install
 ....
 
