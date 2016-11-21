@@ -1,0 +1,78 @@
+= Running Che on OpenShift
+
+image::images/che-on-openshift/rhche.png[width="740", height="550", caption="Logo"]
+
+== chat 
+
+
+[5:00 PM] Ilya Buziuk: @mario @AngelMisevski just finished watching Che hackaton finding recording in order to get the gist about what should be done for OS connector
+[5:01 PM] Ilya Buziuk: could you please clarify current workflow / env setup in order to start with ?
+[5:01 PM] Ilya Buziuk: maybe there is some doc :-)
++
+
+
+https://github.com/l0rd/openche#deployment-of-che-on-minishift
+
+
++ 
+
+this part is about deployment, but as I understand in order to start working on OS connector method implementation one should create che image from your branch - https://github.com/l0rd/che/tree/openshift-connector
+
+
++
+
+== First thing
+
+[5:48 PM] Mario Loriedo: @IlyaBuziuk first you need to make sure you can run Che on Minishift
+[5:52 PM] Mario Loriedo: Once you have that running you should checkout the openshiftconnector branch, build a docker image based on that branch (you can use build_che.sh script in openche) and deploy it on openshift (you can use `./openche.sh deploy` and `./opendche.sh delete` to do automate deployment/removal of che on OpenShift)
+
+[5:58 PM] Mario Loriedo: Let me know how it goes. I think @angel had some problems to build my branch because I'm using 5.0 milestone 6 and apparently milestons 6 artefacts have been removed from codenvy maven repository.
+[5:58 PM] Mario Loriedo: I will rebase my branch tomorrow to the 5.0.0-latest
+
+
+[6:29 PM] Angel Misevski: @mario Yeah I've had a few issues with that -- I've mostly got it working here on the current branch, but most recently che-server does not seem to want to start
+[6:31 PM] Angel Misevski: I'd have done the rebase but there are merge conflicts and I didn't want to read through codenvy's commit history to figure out why fieldnames were changed
+[6:31 PM] Angel Misevski: @IlyaBuziuk let me know if everything builds and deploys cleanly for you
+
+
+== Next Thing
+
+[3:16 PM] Angel Misevski: @mario So I'm able to get Che running on minishiftk, but creating a workspace fails because it tries to docker inspect an image named 'mariolet/che-ws-agent'
+[3:16 PM] Angel Misevski: do I have to manually create that?
+
+
+[3:28 PM] Mario Loriedo: @AngelMisevski great! Now just `docker pull mariolet/che-ws-agent`
+[3:28 PM] Mario Loriedo: and try to create a new workspace
+
+
+@mario ahh I should've thought to do that =)
+
+
+[3:37 PM] Mario Loriedo: @AngelMisevski well sincerly I don't know why OpenShift doesn't get it from the dockerhub itself
+[3:37 PM] Mario Loriedo: That's probably something we need to fix
+
+
+@mario How does DockerConnector deal with workspace creation?
+
+
+[4:37 PM] Mario Loriedo: DockerConnector or OpenShiftConnector?
+[4:37 PM] Angel Misevski: DockerConnector; is that also a docker pull?
+[4:38 PM] Mario Loriedo: before starting the workspace it does a docker build
+[4:39 PM] Angel Misevski: Ah, I see
+[4:39 PM] Mario Loriedo: Docker build of a Dockerfile that has one line (e.g. "FROM codenvy/ubuntu:jdk8")
+[4:39 PM] Mario Loriedo: that's why you see that it pulls an image when the ws is started
+[4:41 PM] Angel Misevski: Makes sense
+[4:42 PM] Angel Misevski: So I've pulled mariolet/che-ws-agent, but now the ws won't start due because of a ServerException
+[4:42 PM] Angel Misevski:
+    Caused by: org.eclipse.che.api.core.ServerException: Unable to read endpoint https://192.168.64.2:8443//api
+[4:43 PM] Angel Misevski: is there some config step I have skipped?
+[4:44 PM] Mario Loriedo: Yep
+[4:45 PM] Mario Loriedo: This value is still hardcoded and you should update it
+[4:45 PM] Mario Loriedo: https://github.com/l0rd/che/blob/openshift-connector/plugins/plugin-docker/che-plugin-docker-client/...
+[4:46 PM] Angel Misevski: @mario Ahh thank you!
+[4:46 PM] Mario Loriedo: And by the way if you want to see how the workspace is started the code is here:
+https://github.com/l0rd/che/blob/openshift-connector/plugins/plugin-docker/che-plugin-docker-machine...
+
+
+
+@AngelMisevski and @IlyaBuziuk I've pushed a new commit that implements OpenShiftConnector::removeContainer()
