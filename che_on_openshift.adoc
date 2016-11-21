@@ -1,6 +1,6 @@
 = Running Che on OpenShift
 
-image::images/che-on-openshift/rhche.png[width="740", height="550", caption="Logo"]
+image::images/che-on-openshift/rhche.png[width="340", height="450",aption="Logo"]
 
 == chat 
 
@@ -13,10 +13,14 @@ image::images/che-on-openshift/rhche.png[width="740", height="550", caption="Log
 
 https://github.com/l0rd/openche#deployment-of-che-on-minishift
 
+this part is about deployment, but as I understand in order to start working on OS connector method implementation one should create che image from your branch - https://github.com/l0rd/che/tree/openshift-connector
+
 
 + 
 
-this part is about deployment, but as I understand in order to start working on OS connector method implementation one should create che image from your branch - https://github.com/l0rd/che/tree/openshift-connector
+== Installing Minishift
+
+https://fabric8.io/guide/getStarted/minishift.html
 
 
 +
