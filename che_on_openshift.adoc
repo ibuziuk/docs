@@ -1,29 +1,17 @@
-= Running Che on OpenShift
+= Eclipse Che on Openshift
 
 image::images/che-on-openshift/rhche.png[width="340", height="450",aption="Logo"]
 
-== chat 
+== How to deploy Eclipse Che on Minishift ?
 
+Pre-requirements:
 
-[5:00 PM] Ilya Buziuk: @mario @AngelMisevski just finished watching Che hackaton finding recording in order to get the gist about what should be done for OS connector
-[5:01 PM] Ilya Buziuk: could you please clarify current workflow / env setup in order to start with ?
-[5:01 PM] Ilya Buziuk: maybe there is some doc :-)
-+
+- OpenShift CLI (`oc`) - `v1.2.2` and above
+- Minishift (`minishift`) - `v0.9.0` and above
 
+Further instructions can be found in https://github.com/l0rd/openche#deployment-of-che-on-minishift[Deployment of Che on Minishift] document.
 
-https://github.com/l0rd/openche#deployment-of-che-on-minishift
-
-this part is about deployment, but as I understand in order to start working on OS connector method implementation one should create che image from your branch - https://github.com/l0rd/che/tree/openshift-connector
-
-
-+ 
-
-== Installing Minishift
-
-https://fabric8.io/guide/getStarted/minishift.html
-
-
-+
+NOTE: this part is about deployment, but as I understand in order to start working on OS connector method implementation one should create che image from your branch - https://github.com/l0rd/che/tree/openshift-connector ?
 
 == First thing
 
@@ -38,6 +26,8 @@ https://fabric8.io/guide/getStarted/minishift.html
 [6:31 PM] Angel Misevski: I'd have done the rebase but there are merge conflicts and I didn't want to read through codenvy's commit history to figure out why fieldnames were changed
 [6:31 PM] Angel Misevski: @IlyaBuziuk let me know if everything builds and deploys cleanly for you
 
+
+== OpenShift Connector
 
 == Next Thing
 
