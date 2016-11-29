@@ -2,7 +2,7 @@
 
 Plan:
 
-1) Provide PR with initial OpenShift connector implementation 
+1) Provide PR with initial OpenShift connector implementation to Che 
 
 2) Implement all OpenShift connector methods
 
@@ -16,12 +16,11 @@ image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI
 
 NOTE: working on item *3* could start before *2* is completed. 
 
-NOTE: Epic Jira for the 1st item from the plan - https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces]
+NOTE: Epic jira for the *1st* item from the plan - https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces]
 
 == Workflow
 
-Currently all OpenShift & Che integration happens in Mario's fork - https://github.com/l0rd/che
-+ 
+Currently all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che  
 First thing, make sure that you can build `openshift-connector` branch:
 
 ```
@@ -31,10 +30,10 @@ git remote add mario git@github.com:l0rd/che.git
 git fetch mario openshift-connector:openshift-connector
 git checkout openshift-connector
 
-mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.compiler.localWorkers=2 -T 1C -Dskip-validate-sources clean install 
+mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.compiler.localWorkers=2 -T 1C -Dskip-validate-sources clean install
 ```
 
-NOTE: PRs are expected to be provided against `openshift-connector` branch
+NOTE: For now PRs are expected to be provided against `openshift-connector` branch
 
 == How to deploy Eclipse Che on Minishift ?
 
