@@ -1,75 +1,48 @@
-= Eclipse Che on Openshift
+= Openshift Connector for Eclipse Che
 
-image::images/che-on-openshift/rhche.png[width="340", height="450",aption="Logo"]
+Currently, the main thing that blocks integration is 
+
+image::images/che-on-openshift/spi.png[width="500", height="700",aption="SPI"]
+
+image::images/che-on-openshift/spi-imp.png[width="500", height="700",aption="SPI Implementation"]
+
+Plan:
+
+1. have initial impl merged to che "openshift-connector" branch
+
+2. implement all OS connector methods
+
+3. define SPI
+
+4. refactor OS connector for using SPI
+
+Epic Jira for the 1st item from the plan - https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces]
+
+NOTE: working on item *3* could start before *2* is completed
+
+== Workflow
+
+Currently all OpenShift & Che integration happens in Mario's fork - https://github.com/l0rd/che 
+First thing, make sure that you can build `openshift-connector` branch:
+
+```
+cd che/
+
+git remote add mario git@github.com:l0rd/che.git
+git fetch mario openshift-connector:openshift-connector
+git checkout openshift-connector
+
+mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.compiler.localWorkers=2 -T 1C -Dskip-validate-sources clean install 
+```
 
 == How to deploy Eclipse Che on Minishift ?
-
-Instructions can be found in https://github.com/l0rd/openche#deployment-of-che-on-minishift[Deployment of Che on Minishift] document.
 
 Pre-requirements:
 
 - OpenShift CLI (`oc`) - `v1.2.2` and above
 - Minishift (`minishift`) - `v0.9.0` and above
 
-== First thing
-
-[5:48 PM] Mario Loriedo: @IlyaBuziuk first you need to make sure you can run Che on Minishift
-[5:52 PM] Mario Loriedo: Once you have that running you should checkout the openshiftconnector branch, build a docker image based on that branch (you can use build_che.sh script in openche) and deploy it on openshift (you can use `./openche.sh deploy` and `./opendche.sh delete` to do automate deployment/removal of che on OpenShift)
-
-== OpenShift Connector / SPI
-
-Plan:
-
-(1) have initial impl merged to che "openshift-connector" branch
-
-(2) implement all OS connector methods
-
-(3) define SPI
-
-(4) refactor OS connector for using SPI
-
-NOTE: (3) could start before (2) is completed / 
-
-== Next Thing
-
-NOTE: rebased the openshift-connector branch and fixed the che.json template to make it work with current upstream master branch. Removed hard-coded docker image mariolet/che-ws-agent (now the image correspond to the selected stack). Now I'm trying to deploy Che on che.ci.centos.org but will need support by KB team (I don't have the rights to create a serviceaccount).
-
-[3:16 PM] Angel Misevski: @mario So I'm able to get Che running on minishiftk, but creating a workspace fails because it tries to docker inspect an image named 'mariolet/che-ws-agent'
-[3:16 PM] Angel Misevski: do I have to manually create that?
+First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-of-che-on-minishift[Deployment of Che on Minishift] document. 
 
 
-[3:28 PM] Mario Loriedo: @AngelMisevski great! Now just `docker pull mariolet/che-ws-agent`
-[3:28 PM] Mario Loriedo: and try to create a new workspace
-
-
-@mario ahh I should've thought to do that =)
-
-
-[3:37 PM] Mario Loriedo: @AngelMisevski well sincerly I don't know why OpenShift doesn't get it from the dockerhub itself
-[3:37 PM] Mario Loriedo: That's probably something we need to fix
-
-
-@mario How does DockerConnector deal with workspace creation?
-
-
-[4:37 PM] Mario Loriedo: DockerConnector or OpenShiftConnector?
-[4:37 PM] Angel Misevski: DockerConnector; is that also a docker pull?
-[4:38 PM] Mario Loriedo: before starting the workspace it does a docker build
-[4:39 PM] Angel Misevski: Ah, I see
-[4:39 PM] Mario Loriedo: Docker build of a Dockerfile that has one line (e.g. "FROM codenvy/ubuntu:jdk8")
-[4:39 PM] Mario Loriedo: that's why you see that it pulls an image when the ws is started
-[4:41 PM] Angel Misevski: Makes sense
-[4:42 PM] Angel Misevski: So I've pulled mariolet/che-ws-agent, but now the ws won't start due because of a ServerException
-[4:42 PM] Angel Misevski:
-    Caused by: org.eclipse.che.api.core.ServerException: Unable to read endpoint https://192.168.64.2:8443//api
-[4:43 PM] Angel Misevski: is there some config step I have skipped?
-[4:44 PM] Mario Loriedo: Yep
-[4:45 PM] Mario Loriedo: This value is still hardcoded and you should update it
-[4:45 PM] Mario Loriedo: https://github.com/l0rd/che/blob/openshift-connector/plugins/plugin-docker/che-plugin-docker-client/src/main/java/org/eclipse/che/plugin/docker/client/OpenShiftConnector.java#L62
-
-[4:46 PM] Angel Misevski: @mario Ahh thank you!
-[4:46 PM] Mario Loriedo: And by the way if you want to see how the workspace is started the code is here:
-https://github.com/l0rd/che/blob/openshift-connector/plugins/plugin-docker/che-plugin-docker-machine/src/main/java/org/eclipse/che/plugin/docker/machine/MachineProviderImpl.java#
-
-
-@AngelMisevski and @IlyaBuziuk I've pushed a new commit that implements OpenShiftConnector::removeContainer()
+== Debugging Che on Minishift
