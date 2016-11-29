@@ -1,20 +1,22 @@
 = Openshift Connector for Eclipse Che
 
-Currently, the main thing that blocks integration is 
+image::images/che-on-openshift/spi.png[width="500", height="300",aption="SPI"]
 
-image::images/che-on-openshift/spi.png[width="500", height="700",aption="SPI"]
-
-image::images/che-on-openshift/spi-imp.png[width="500", height="700",aption="SPI Implementation"]
+image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI Implementation"]
 
 Plan:
 
-1. have initial impl merged to che "openshift-connector" branch
+1. Provide PR with initial OpenShift connector implementation 
 
-2. implement all OS connector methods
+2. Implement all OpenShift connector methods
 
-3. define SPI
+3. Define SPI
 
-4. refactor OS connector for using SPI
+image::images/che-on-openshift/spi.png[width="500", height="300",aption="SPI"]
+
+image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI Implementation"]
+
+4. Refactor OpenShift Connector for using SPI
 
 Epic Jira for the 1st item from the plan - https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces]
 
@@ -22,7 +24,8 @@ NOTE: working on item *3* could start before *2* is completed
 
 == Workflow
 
-Currently all OpenShift & Che integration happens in Mario's fork - https://github.com/l0rd/che 
+Currently all OpenShift & Che integration happens in Mario's fork - https://github.com/l0rd/che
++ 
 First thing, make sure that you can build `openshift-connector` branch:
 
 ```
