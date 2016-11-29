@@ -20,7 +20,8 @@ NOTE: Epic jira for the *1st* item from the plan - https://issues.jboss.org/brow
 
 == Workflow
 
-Currently all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che  
+Currently all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che
+
 First thing, make sure that you can build `openshift-connector` branch:
 
 ```
