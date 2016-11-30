@@ -16,7 +16,7 @@ image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI
 
 NOTE: working on item *3* could start before *2* is completed.
 
-NOTE: Epic jira for the - https://issues.jboss.org/browse/CHE-26[OpenShift Integration to Che]
+NOTE: Epic jira - https://issues.jboss.org/browse/CHE-26[OpenShift Integration to Che]
 
 == Workflow
 
