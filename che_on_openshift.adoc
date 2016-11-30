@@ -1,4 +1,4 @@
-= Openshift Connector for Eclipse Che
+# Openshift Connector for Eclipse Che
 
 Current plan for OpenShift integration to Che project:
 
@@ -18,7 +18,7 @@ NOTE: working on item *3* could start before *2* is completed.
 
 NOTE: Epic Jira - https://issues.jboss.org/browse/CHE-26[OpenShift Integration to Che]
 
-== Workflow
+## Workflow
 
 For now all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che
 
@@ -37,7 +37,7 @@ mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.com
 NOTE: For now PRs are expected to be provided against Mario's fork `openshift-connector` branch
 
 
-== How to deploy Eclipse Che (`openshift-connector` branch) on Minishift?
+## How to deploy Eclipse Che (`openshift-connector` branch) on Minishift?
 
 Pre-requirements:
 
@@ -88,7 +88,7 @@ export CHE_OPENSHIFT_ENDPOINT=https://$(minishift ip):8443
 ```
 NOTE: For removing Che workspaces `./remove_ws.sh` script can be used
 
-== Debugging Che on Minishift
+## Debugging Che on Minishift
 
 In order to debug Che running on Minishift `che_debug.json` template should be used. Just change `DEFAULT_CHE_TEMPLATE` value in `openche.sh`:
 
@@ -100,9 +100,7 @@ Other steps are identical to the ones described in the previous section. Once Ch
 
 image::images/che-on-openshift/debug_port.png[width="700", height="300",aption="Debugging Port"]
 
-
 Now you can use it for remote debugging in your IDE:
-
 
 image::images/che-on-openshift/debug_conf.png[width="700", height="500",aption="Debug Configuration"]
 
