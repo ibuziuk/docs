@@ -1,16 +1,17 @@
-# Openshift Connector for Eclipse Che
+= Openshift Connector for Eclipse Che
 
 Current plan for OpenShift integration to Che project:
 
-1\. Provide PR with initial OpenShift connector implementation to Che project
+1. Provide PR with initial OpenShift connector implementation to Che project
 
-2\. Implement all OpenShift connector methods
+2. Implement all OpenShift connector methods
 
-3\. Define SPI
+3. Define SPI
 
 image::images/che-on-openshift/spi.png[width="500", height="300",aption="SPI"]
 
-4\. Refactor OpenShift Connector for using SPI
+[start=4]
+4. Refactor OpenShift Connector for using SPI
 
 image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI Implementation"]
 
@@ -37,7 +38,7 @@ mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.com
 NOTE: For now PRs are expected to be provided against Mario's fork `openshift-connector` branch
 
 
-## How to deploy Eclipse Che (`openshift-connector` branch) on Minishift?
+== How to deploy Eclipse Che (`openshift-connector` branch) on Minishift?
 
 Pre-requirements:
 
@@ -46,7 +47,8 @@ Pre-requirements:
 
 First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-che-on-minishift[Deployment Che on Minishift] document. 
 
-5\. build 'codenvy/che-server:local' image:
+[start=5]
+5. build 'codenvy/che-server:local' image:
 
 ```sh
 # Get the script from github
@@ -59,7 +61,8 @@ export GITHUB_REPO=path/to/che
 
 NOTE: Minishift docker daemon should be used for building the image: `eval $(minishift docker-env)`
 
-6\. Update Openshift template `che.json` / `che_debug.json` with the following values:
+[start=6]
+6. Update Openshift template `che.json` / `che_debug.json` with the following values:
 
 
 ```
@@ -69,8 +72,8 @@ CHE_OPENSHIFT_ENDPOINT => https://$(minishift ip):8443 e.g. https://192.168.42.1
 
 imagePullPolicy => "IfNotPresent"
 ```
-
-7\. Deploy Che:
+[start=7]
+7. Deploy Che:
 
 ```
 oc login -u openshift-dev -p devel
@@ -88,7 +91,7 @@ export CHE_OPENSHIFT_ENDPOINT=https://$(minishift ip):8443
 ```
 NOTE: For removing Che workspaces `./remove_ws.sh` script can be used
 
-## Debugging Che on Minishift
+== Debugging Che on Minishift
 
 In order to debug Che running on Minishift `che_debug.json` template should be used. Just change `DEFAULT_CHE_TEMPLATE` value in `openche.sh`:
 
