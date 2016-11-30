@@ -90,9 +90,11 @@ NOTE: For removing Che workspaces `./remove_ws.sh` script can be used
 
 == Debugging Che on Minishift
 
-In order to debug Che running on Minishift `che_debug.json` template should be used. Just export `DEFAULT_CHE_TEMPLATE` variable before deploying:
+In order to debug Che running on Minishift `che_debug.json` template should be used. Just change `DEFAULT_CHE_TEMPLATE` value in `openche.sh`:
 
+```
 DEFAULT_CHE_TEMPLATE="./che_debug.json"
+```
 
 Other steps are identical to the ones described in the previous section. Once Che is deployed you can see that the port for debugging is exposed: 
 
