@@ -22,9 +22,7 @@ NOTE: Epic jira for the *1st* item from the plan - https://issues.jboss.org/brow
 
 For now all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che
 
-Once 11 remaining issues from https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces] are fixed we will be ready to provide PR with initial OpenShift inegration to Che project.
-
-First thing, make sure that you can build `openshift-connector` branch:
+Once 11 remaining issues from https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces] are fixed we will be ready to provide PR with initial OpenShift inegration to Che project. First thing, make sure that you can build `openshift-connector` branch:
 
 ```
 cd che/
@@ -39,7 +37,7 @@ mvn -Dskip-enforce -Dskip-validate-sources -DskipTests -Dfindbugs.skip -Dgwt.com
 NOTE: For now PRs are expected to be provided against Mario's fork `openshift-connector` branch
 
 
-== How to deploy Eclipse Che on Minishift ?
+== How to deploy Eclipse Che on Minishift from `openshift-connector` branch ?
 
 Pre-requirements:
 
@@ -48,8 +46,47 @@ Pre-requirements:
 
 First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-che-on-minishift[Deployment Che on Minishift] document. 
 
-5. 
+5. build 'codenvy/che-server:local' image:
+
+```sh
+# Get the script from github
+git clone https://github.com/l0rd/openche
+cd openche
+
+export GITHUB_REPO=path/to/che
+./build_che.sh 
+```
+
+NOTE: Minishift docker daemon should be used for building the image: `eval $(minishift docker-env)`
+
+6. Update Openshift template `che.json` / `che_debug.json` with the following values:
 
 
+```
+HOSTNAME_HTTP => che.openshift.mini
+CHE_SERVER_DOCKER_IMAGE => codenvy/che-server:local
+CHE_OPENSHIFT_ENDPOINT => https://$(minishift ip):8443 e.g. https://192.168.42.195:8443
+
+imagePullPolicy => "IfNotPresent"
+```
+
+7. Deploy Che:
+
+```
+oc login -u openshift-dev -p devel
+export CHE_HOSTNAME=che.openshift.mini
+export CHE_IMAGE=codenvy/che-server:local
+export DOCKER0_IP=$(docker run -ti --rm --net=host alpine ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+export CHE_OPENSHIFT_ENDPOINT=https://$(minishift ip):8443
+
+# If a previous version of Che was deployed, delete it
+./openche.sh delete
+
+# Install OpenShift Che template and deploy Che 
+./openche.sh deploy
+
+```
 
 == Debugging Che on Minishift
+
+For debugging JPDA approach is used 
