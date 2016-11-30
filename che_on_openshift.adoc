@@ -14,7 +14,7 @@ image::images/che-on-openshift/spi.png[width="500", height="300",aption="SPI"]
 
 image::images/che-on-openshift/spi-imp.png[width="500", height="300",aption="SPI Implementation"]
 
-NOTE: working on item *3* could start before *2* is completed. 
+NOTE: working on item *3* could start before *2* is completed.
 
 NOTE: Epic jira for the *1st* item from the plan - https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces]
 
@@ -22,9 +22,7 @@ NOTE: Epic jira for the *1st* item from the plan - https://issues.jboss.org/brow
 
 For now all initial OpenShift & Che integration work is happening in Mario's fork - https://github.com/l0rd/che
 
-Once 11 remaining issues from https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces] are fixed 
-
-we will be ready to provide PR with initial OpenShift inegration to Che project.
+Once 11 remaining issues from https://issues.jboss.org/browse/CHE-26[Use K8S API to create Che workspaces] are fixed we will be ready to provide PR with initial OpenShift inegration to Che project.
 
 First thing, make sure that you can build `openshift-connector` branch:
 
@@ -48,7 +46,10 @@ Pre-requirements:
 - OpenShift CLI (`oc`) - `v1.2.2` and above
 - Minishift (`minishift`) - `v0.9.0` and above
 
-First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-of-che-on-minishift[Deployment of Che on Minishift] document. 
+First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-che-on-minishift[Deployment Che on Minishift] document. 
+
+5. 
+
 
 
 == Debugging Che on Minishift
