@@ -46,7 +46,7 @@ Pre-requirements:
 
 First 4 steps are identical to the ones described in https://github.com/l0rd/openche#deployment-che-on-minishift[Deployment Che on Minishift] document. 
 
-5. build 'codenvy/che-server:local' image:
+1. build 'codenvy/che-server:local' image:
 
 ```sh
 # Get the script from github
@@ -59,7 +59,7 @@ export GITHUB_REPO=path/to/che
 
 NOTE: Minishift docker daemon should be used for building the image: `eval $(minishift docker-env)`
 
-6. Update Openshift template `che.json` / `che_debug.json` with the following values:
+2. Update Openshift template `che.json` / `che_debug.json` with the following values:
 
 
 ```
@@ -70,7 +70,7 @@ CHE_OPENSHIFT_ENDPOINT => https://$(minishift ip):8443 e.g. https://192.168.42.1
 imagePullPolicy => "IfNotPresent"
 ```
 
-7. Deploy Che:
+3. Deploy Che:
 
 ```
 oc login -u openshift-dev -p devel
@@ -86,7 +86,22 @@ export CHE_OPENSHIFT_ENDPOINT=https://$(minishift ip):8443
 ./openche.sh deploy
 
 ```
+NOTE: For removing Che workspaces `./remove_ws.sh` script can be used
 
 == Debugging Che on Minishift
 
-For debugging JPDA approach is used 
+In order to debug Che running on Minishift `che_debug.json` template should be used. Just export `DEFAULT_CHE_TEMPLATE` variable before deploying:
+
+DEFAULT_CHE_TEMPLATE="./che_debug.json"
+
+Other steps are identical to the ones described in the previous section. Once Che is deployed you can see that the port for debugging is exposed: 
+
+image::images/che-on-openshift/debug_port.png[width="500", height="300",aption="Debugging Port"]
+
+
+Now you can use it for remote debugging in your IDE:
+
+
+image::images/che-on-openshift/debug_conf.png[width="500", height="300",aption="Debug Configuration"]
+
+NOTE: More info about Che remote debugging can be found in the https://github.com/ibuziuk/docs/blob/master/che_remote_debugging.adoc[Eclipse Che - remote debugging setup] document
