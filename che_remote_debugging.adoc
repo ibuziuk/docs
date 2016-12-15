@@ -29,6 +29,8 @@ The final step is running the Eclipse Che launcher image with several environmen
 
 NOTE: If port *8000* is already in use you can specify other port for debugging via `CHE_DEBUG_SERVER_PORT` environment variable
 
+NOTE: Make sure that you have the latest version of *eclipse/che* image via `docker pull eclipse/che`
+
 The command itself looks the following way:
 ....
 docker run -t -v /var/run/docker.sock:/var/run/docker.sock -e "CHE_DEBUG_SERVER=true" -e "CHE_LOCAL_BINARY=/home/git/che/assembly/assembly-main/target/eclipse-che-5.0.0-M5-SNAPSHOT/eclipse-che-5.0.0-M5-SNAPSHOT" eclipse/che start
