@@ -1,0 +1,32 @@
+== How to run Eclipse Che on Minishift
+
+=== Version 0.9.0 
+
+1\. Get [minishift](https://github.com/minishift/minishift#installation), create an OpenShift cluster (`minishift start`), open the web console (`minishift console`) and read the instructions to install the OpenShift CLI (help->Command Line Tools).
+
+2\. Use that command to use minishift docker daemon: `eval $(minishift docker-env)`
+
+3\. Configure OpenShift
+
+```sh
+# Enable OpenShift router
+oc login -u admin -p admin -n default
+docker pull openshift/origin-haproxy-router:`oc version | awk '{ print $2; exit }'`
+oc adm policy add-scc-to-user hostnetwork -z router
+oc adm router --create --service-account=router --expose-metrics --subdomain="openshift.mini"
+```
+
+4\. Update `/etc/hosts` with a line that associates minishift IP address (`minishift ip`) and the hostname `che.openshift.mini`
+
+5\. 
+```sh
+# Create OpenShift project
+oc login -u openshift-dev -p devel
+oc new-project che
+
+# Create a serviceaccount with privileged scc
+oc login -u admin -p admin -n che
+oc adm policy add-scc-to-user privileged -z che
+oc apply -f http://central.maven.org/maven2/io/fabric8/online/packages/fabric8-online-team/$ONLINE_VERSION/fabric8-online-team-$ONLINE_VERSION-openshift.yml
+oc expose service/che --hostname=che.openshift.mini
+```
