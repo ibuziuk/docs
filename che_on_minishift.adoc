@@ -1,6 +1,9 @@
 == How to run Eclipse Che on Minishift
 
-Get https://github.com/minishift/minishift#installation[minishift], create an OpenShift cluster (`minishift start`), open the web console (`minishift console`) and read the instructions to install the OpenShift CLI (help->Command Line Tools).
+1. Get https://github.com/minishift/minishift#installation[minishift], create an OpenShift cluster (`minishift start`), open the web console (`minishift console`) and read the instructions to install the OpenShift CLI (help->Command Line Tools)
+
+2. Install https://github.com/fabric8io/gofabric8#gofabric8-installer [gofabric8]
+
 
 === Version 1.0.0 and above
 
@@ -29,9 +32,17 @@ oc new-project che
 oc login -u admin -p admin -n che
 oc adm policy add-scc-to-user privileged -z che
 ```
+
+- Pull che-server image
+```sh
+docker pull rhche/che-server:nightly 
+```
 - Apply Eclipse Che template from fabric8 online
 ```sh
 oc apply -f http://central.maven.org/maven2/io/fabric8/online/packages/fabric8-online-team/$ONLINE_VERSION/fabric8-online-team-$ONLINE_VERSION-openshift.yml
+
+gofabric8 volumes
+
 ```
 
 - Create router
