@@ -1,4 +1,4 @@
-= JSDT Front-end Debugger (Test from )
+= JSDT Front-end Debugger
 
 == How JavaScript Debugger works now ?
 
