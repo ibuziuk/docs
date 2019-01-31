@@ -1,0 +1,24 @@
+== What are plugin brokers in general (why plugin brokers are needed)
+
+==== Theia supports several types of plugins including VSCode extensions. It could add support of new plugin types in future
+==== Since Che 7 supports plugable editor implementations we should have an ability to add broker of plugins suitable for a new editor
+==== It is possible to also implement plugins for other plugins
+
+== What plugin brokers can do
+
+==== Download binaries and configuration of editors/plugins
+==== Generate configuration of editors/plugins including sidecars
+==== Unpack files in it is needed for them to be consumed by an editor
+==== Send logs of stages of its work to Workspace master to make workspace start more verbose to show why a user waits
+==== Send error if something goes wrong
+
+== Description of existing plugin brokers from https://github.com/eclipse/che-plugin-broker/blob/master/README.md
+
+== TODO
+
+Documentation is supposed to be published on eclipse.org website -  https://www.eclipse.org/che/docs/che-7/index.html 
+
+- https://bluejeans.com/s/B6Wbo
+- https://docs.google.com/presentation/d/1ouN3eBbRZy10rmBEnGhx9Xrz8vNm5CSSc3nqEIzn0Nw/edit#slide=id.g49a86d12a0_0_130
+- https://gist.github.com/garagatyi/edfd4e7fdeba1fdf18d9a0e2404d538d
+- https://www.eclipse.org/che/docs/che-7/index.html
