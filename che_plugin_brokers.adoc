@@ -1,10 +1,12 @@
-== What are plugin brokers in general (why plugin brokers are needed)
+== What are plugin brokers in general (why plugin brokers are needed) ?
 
 ==== Theia supports several types of plugins including VSCode extensions. It could add support of new plugin types in future
 ==== Since Che 7 supports plugable editor implementations we should have an ability to add broker of plugins suitable for a new editor
 ==== It is possible to also implement plugins for other plugins
 
-== What plugin brokers can do
+== What plugin brokers can do and how they work ?
+
+image::images/che-plugin-brokers/plugin_broker_pod.png[width="1500", height="400",aption="Che Plugin Broker Pod as init container"]
 
 ==== Download binaries and configuration of editors/plugins
 ==== Generate configuration of editors/plugins including sidecars
