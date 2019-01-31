@@ -6,7 +6,7 @@
 
 == What plugin brokers can do and how they work ?
 
-image::images/che-plugin-brokers/plugin_broker_pod.png[width="1640", height="290",aption="Che Plugin Broker Pod as init container"]
+image::images/che-plugin-brokers/plugin_broker_pod.png[width="1640", height="250",aption="Che Plugin Broker Pod as init container"]
 
 ==== Download binaries and configuration of editors/plugins
 ==== Generate configuration of editors/plugins including sidecars
