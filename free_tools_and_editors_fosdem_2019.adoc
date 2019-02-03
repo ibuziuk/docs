@@ -1,0 +1,63 @@
+== Free tools and editors 
+
+== GraalVM: Polyglot Dvelopment Platform with Great Toolability
+
+== Embracing LS for Blockchain development
+
+==== ethereum (block-chain smart contract)
+
+==== gas (money) to execute transactions / transactions are executed via gas
+
+==== crypto kittes
+
+==== how to program smart contract
+
+- contracts - solidity / viper
+- remix IDE (web IDE)
+- solidity LSP (yakindu)
+- solidity language server
+
+- LSP decouples language from editor
+- based on json-rpc
+- Eclipse LSP4J
+- theia lsp solidity (npm package -> start LS when file is opened)
+- server world is misleading (2 process on the same machine / same filesytem)
+- LSP to xtext
+
+== Tools for shrinking your containers
+
+- dietitian
+- fat / help
+- "fat" is bad for software (difficult to deploy)
+- TOFI (why is my container TOFI)
+- banana / gorilla taken bannana
+- vulnerability
+- microcontainers (single execution)
+
+==== Container pattern -> builder pattern
+
+Do Not Do This! Hard to maintain
+
+==== Multistage build
+
+==== Squash (experimental)
+
+==== Smith tool (created by Oracle)
+
+from scratch ?
+
+== Developer centric IoT Platforms
+
+== Adding support for new languages / Dart
+
+==== What is LSP
+
+- M languages x N editors -> do not reinvent the wheel (bi-directional)
+- Client -> Server (term misleading - on local machine, no privacy concerns)
+- based on notifications
+- LSP is growing - http://langsserver.org
+- syntax highlighting not done by LSP
+- Dart
+- syntax colouring LSP issue
+
+== Eclipse Performance

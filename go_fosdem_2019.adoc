@@ -1,0 +1,30 @@
+== traefic / http reversse proxy
+==== reverse proxy
+
+what is reverse proxy ?
+
+- client
+- server
+- proxy
+
+X-Forwarded-For
+
+go rutine ? (function)
+
+== source{d} git database / bitmap index
+
+==== Gitbase (frontend)
+- index / join / BTrees 
+
+==== Go debuging with println
+
+== State of Devle debugger for Go
+
+==== Derek Parker (Creator of Delve) ~4.5 years (debugger in go) / 88 contributors
+
+v1.0 & v1.1.0 released - go 1.10 / 1.11
+
+== Embeded
+
+- rpi3
+- gokrazy
