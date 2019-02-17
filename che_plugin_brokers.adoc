@@ -1,5 +1,26 @@
 == What are plugin brokers in general (why plugin brokers are needed) ?
 
+Che has devPlugin brokers. The purpose of devPlugin brokers is to handle a specific way to install a devPlugin into Che. There are several type of devPlugins that can run on different editors and may be packaged differently. So each cases requires a specific installation.
+At the moment, according to the `type` metadata of the devPlugin, Che would start the right broker and process the specific installation process.
+We have these below devPlugin types and each of them has a broker implementation:
+
+- Che-VSCode plug-in
+    - Sidecar containers
+    - A reference to a vscode extension (in the market place)
+- Che plug-in
+    - Sidecar containers
+    - Editor commands
+- Theia plug-in
+    - A .theia file with
+        - The plugin on a che-theia editor
+        - Optionally sidecars container
+- Editor plug-in
+    - A containers with a web app (editor)
+    - Sidecar containers
+
+Each type of plugin have a corresponding broker. Broker install process for each type is describe here: https://github.com/eclipse/che-plugin-broker/blob/master/README.md 
+
+
 ==== Theia supports several types of plugins including VSCode extensions. It could add support of new plugin types in future
 ==== Since Che 7 supports plugable editor implementations we should have an ability to add broker of plugins suitable for a new editor
 ==== It is possible to also implement plugins for other plugins
