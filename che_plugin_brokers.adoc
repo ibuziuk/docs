@@ -9,7 +9,7 @@ Before diving into the plugin broker concept let's briefly summarize which types
 * Che Plugin
 ** sidecar container which provides additional functionality e.g  `che-machine-exec-plugin` (provides terminal capabilities)
 * VS Code extension Plugin
-** sidecar container which provides functionality of an existing vscode extension e.g. https://www.sonarlint.org/vscode/(sonarlint)
+** sidecar container (can be also run in the main theia container) which provides functionality of an existing vscode extension e.g. https://www.sonarlint.org/vscode/[sonarlint]
 * Theia Plugin
 ** sidecar container (can be also run in the main theia container) which extends functionality of the che-theia editor
 
@@ -62,13 +62,15 @@ All the existing plugins are available via the plugin registry - a standalone se
 
 NOTE: https://che-plugin-registry.openshift.io is used as the default plugin registry, but it could be overriden via `CHE_WORKSPACE_PLUGIN__REGISTRY__URL` env var. Can be also set to 'NULL' in case plugin tooling are not required.
 
-This metadata is consumed by Che sever and exposed via the User Dashboard for choosing the plugins during the workspace creation:
+This metadata is consumed by Che sever and exposed via the User Dashboard for plugin picking during the workspace creation:
 
-image::images/che-plugin-brokers/plugins.png[width="1640", height="1500",aption="Che plugins"]
+image::images/che-plugin-brokers/plugins.png[width="1640", height="560",aption="Plugin selection on User Dashboard"]
 
-During workspace creation user can select only one `Che Editor Plugin` and multiple Che, VS Code, Theia plugins.
+NOTE: During workspace creation user can select only one `Che Editor Plugin` and multiple `Che`, `VS Code`, `Theia` plugins.
 
-NOTE: Che, VS Code, Theia plugin functionality depend could depend on the `Che Editor Plugin`. For example VS Code Plugin will not provide any functionality in the Jupyter Notebook. At the moment there is no smart validation of plugins based on the editor type.
+NOTE: `Che`, `VS Code`, `Theia` plugin functionality depend could depend on the `Che Editor Plugin`. For example VS Code Plugin will not provide any functionality in the Jupyter Notebook. At the moment there is no smart validation of plugins based on the editor type.
+
+NOTE: `Theia IDE` support both `VSCode extension` and `Theia` plugins
 
 More information about the plugin registry can be found in the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] README.md
 
@@ -76,11 +78,11 @@ More information about the plugin registry can be found in the https://github.co
 
 Plugin boker is an application that runs just before the actual workspace start phase and based on the recieved plugin metadata deliveres the plugin binaries to the workspace containers. Taken into account that there are multiple types of plugins there are also multiple types of brokers:
 
-* `Che Plugin Broker` for `Che Plugin` type
+* `Che Plugin Broker` for `Che Plugin` and `Che Editor` types
 * `VS Code extension Broker` for `VS Code extension Plugin` type
 * `Theia Plugin Broker` for `Theia Plugin` type
 
-NOTE: Plugin broker process `Che Plugin`, `VS Code extension Plugin`, `Theia Plugin` and do not process `Che Editor Plugin` types (editor plugins are processed directly by Che server).
+NOTE: Since Che supports plugable editor implementations (Theia, Dirigible, Jupyter Notebook) in future it is planned to have an ability to add broker of plugins suitable for a new editor e.g. `Dirigible Plugin Broker`  
 
 More details about the existing plugin brokers and how those are difer one from another can be found in the `README.MD` of the dedicated https://github.com/eclipse/che-plugin-broker[che-plugin-broker] repository.
 
@@ -88,10 +90,31 @@ More details about the existing plugin brokers and how those are difer one from 
 
 image::images/che-plugin-brokers/plugin_broker_pod.png[width="1640", height="250",aption="Che Plugin Broker Pod as init container"]
 
+The most important info that plugin registry provides is the `"type"` of the plugin and the link to `meta.yaml`:
+
+.meta.yaml
+[source,yaml]
+----
+id: org.eclipse.che.vscode-sonarlint
+version: 0.0.1
+type: VS Code extension
+name: vscode-sonarlint
+title: Sonarlint code intelligence
+description: VS Code extension that provides sonarlint features
+icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
+attributes:
+  extension: vscode:extension/SonarSource.sonarlint-vscode
+  containerImage: garagatyi/remotetheia:java
+firstPublicationDate: "2019-02-05"
+category: Linter
+publisher: SonarSource
+repository: https://www.sonarlint.org/
+latestUpdateDate: "2019-02-24"
+----
+
 === Plugin broker activity diagramm 
 
-image::images/che-plugin-brokers/plugin_broker_activity_diagramm.svg[width="1640", height="1640",aption="Che Plugin Broker activity diagramm"]
-
+image::images/che-plugin-brokers/plugin_broker_activity_diagramm.svg[width="1640", height="560",aption="Che Plugin Broker activity diagramm"]
 
 == What are the plugin brokers in general (why plugin brokers are needed) ?
 
@@ -126,10 +149,6 @@ Each type of plugin have a corresponding broker. Broker install process for each
 ==== Unpack files in it is needed for them to be consumed by an editor
 ==== Send logs of stages of its work to Workspace master to make workspace start more verbose to show why a user waits
 ==== Send error if something goes wrong
-
-== Description of existing plugin brokers from https://github.com/eclipse/che-plugin-broker/blob/master/README.md
-
-== TODO
 
 Documentation is supposed to be published on eclipse.org website -  https://www.eclipse.org/che/docs/che-7/index.html 
 
