@@ -90,7 +90,7 @@ repository: https://www.sonarlint.org/
 latestUpdateDate: "2019-02-24"
 ----
 
-`meta.yaml` format will be discussed in the more details in the `Plugin Broker Lifecycle` section
+TIP: `meta.yaml` format will be discussed in the more details in the `Plugin Broker Lifecycle` section
 
 More information about the plugin registry can be found in the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] README.md
 
