@@ -2,7 +2,7 @@
 
 == Existing types of plugins
 
-Before diving into the plugin broker concept let's briefly summarize which types of plugins are currently supported in Che:
+Before diving into the plugin broker concept, it really worth to briefly summarize the existing types of plugins which are currently supported in Che:
 
 * Che Editor Plugin
 ** provides an editor / IDE running as a sidecar e.g. `Theia`, `Dirigible`, `Jupyter Notebook` etc.
@@ -60,7 +60,7 @@ All the plugins are available via the plugin registry - a standalone service whi
 ]
 ----
 
-NOTE: https://che-plugin-registry.openshift.io is used as the default plugin registry, but it could be overriden via `CHE_WORKSPACE_PLUGIN__REGISTRY__URL` env var and developer can spesify custom plugin registry with the custom set of plugins. The env var can be also set to 'NULL' if plugin tooling are not required.
+NOTE: https://che-plugin-registry.openshift.io is used as the default plugin registry, but it could be overriden via `++CHE_WORKSPACE_PLUGIN__REGISTRY__URL++` env var and developer can spesify custom plugin registry with the custom set of plugins. The env var can be also set to 'NULL' if plugin tooling are not required.
 
 This metadata is consumed by the Che sever and exposed via the "User Dashboard" for plugin picking during a workspace creation:
 
@@ -68,7 +68,7 @@ image::images/che-plugin-brokers/plugins.png[width="1640", height="480",aption="
 
 NOTE: User can select only one `Che Editor Plugin` and multiple `Che`, `VS Code`, `Theia` plugins. Moreover, `Che` /`VS Code` / `Theia` plugin functionality depends on the `Che Editor Plugin` selection. For instance, `VS Code Plugin` will not provide any additional functionality in the Jupyter Notebook, since this plugin type is not honored by the editor. On the other hand, `Theia IDE` editor supports both `VSCode extension` and `Theia` plugins. At the moment there is no smart validation of plugin selection based on the editor type.
 
-The most important information that plugin registry provides to the Che server is the `"type"` of the plugin (`Che`, `VS Code`, `Theia`) and the link to `meta.yaml`:
+The most important information that plugin registry provides to the Che server is the `"type"` of the plugin (e.g `VS Code extension`) and the link to `meta.yaml`:
 
 .meta.yaml
 [source,yaml]
@@ -90,90 +90,76 @@ repository: https://www.sonarlint.org/
 latestUpdateDate: "2019-02-24"
 ----
 
-TIP: `meta.yaml` format will be discussed in the more details in the `Plugin Broker Lifecycle` section
+TIP: `meta.yaml` format will be discussed in the more details in the `Plugin Broker Lifecycle` section.
+
+TIP: `containerImage` attribute specifies the image that would be used for running the plugin as a sidecar container. If the `containerImage` attribute is not specified, the plugin will be running in side of the Theia container.
 
 More information about the plugin registry can be found in the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] README.md
 
 == Plugin brokers
-Now when we have a basic understanding of the `Plugin` and `Plugin Registry` let's move to the `Plugin Broker` concept.
+Now when we have a discussed the `Plugin` and `Plugin Registry` it is high time to introduce the `Plugin Broker` concept.
 
-**Plugin Broker** - is an application that runs just before the actual workspace start phase and based on the recieved plugin metadata deliveres the plugin binaries to the workspace containers. 
+**Plugin Broker** - is an application that runs just before the actual workspace start phase and based on the recieved plugin metadata deliveres the plugin binaries to the workspace containers, and sends workspace configuration changes to the `Che Server` that are needed to be applied before the workspace startup.
 
-Taking into account, that there are multiple types of plugins, there are also multiple types of brokers:
+Taking into account, that there are multiple types of plugins, there are also multiple types of brokers since each type of plugin needs to be processed differently:
 
 * `Che Plugin Broker` for `Che Plugin` and `Che Editor` types
 * `VS Code extension Broker` for `VS Code extension Plugin` type
 * `Theia Plugin Broker` for `Theia Plugin` type
 
-CAUTION: Since Che supports plugable editor implementations (Theia, Dirigible, Jupyter Notebook) in future new types of plugins with dedicated brokers could appear e.g. `Dirigible Plugin` / `Dirigible Plugin Broker`  
-
-In this document it is not planned to focus on implementation details of each plugin broker and list defferences between them, but rather provide an architectural overview of the `Plugin Broker` concept.  
-
 TIP: Implementation details and differences of the existing plugin brokers can be found in the  `README.MD` of the dedicated https://github.com/eclipse/che-plugin-broker[che-plugin-broker] repository.
 
+CAUTION: Since Che supports plugable editor implementations (Theia, Dirigible, Jupyter Notebook),  it is vey likely that the new types of plugins with the dedicated brokers would appear in future e.g. `Dirigible Plugin` / `Dirigible Plugin Broker`  
+
 === Plugin Broker Lifecycle
+In this document it is not planned to focus on the implementation details of each broker or/and list defferences between each of them, but rather provide an architectural overview of the `Plugin Broker` concept. Schematic `Plugin Broker Lifecycle` can be represented in the following way:
 
-The most important info that plugin registry provides is the `"type"` of the plugin and the link to `meta.yaml`:
+image::images/che-plugin-brokers/plugin_broker_lifecycle.png[width="1000", height="800",aption="Plugin Broker Lifecycle"]
 
-.meta.yaml
-[source,yaml]
+1. Before the actual workspace startup, `Che Server` makes a request to the `Che Plugin Registry` in order to get the metadata about the plugins which are added to the workspace.
+2. `Che Plugin Registry` provides metadata about the plugins to the `Che Server`.
+3. Based on the plugins' `"type"` attributes `Che Server` decides which `Plugin Brokers` need to be run before the actual workspace startup. Basically, in `Che Server` there is a 1:1 mapping https://github.com/eclipse/che/blob/master/infrastructures/openshift/src/main/java/org/eclipse/che/workspace/infrastructure/openshift/OpenShiftInfraModule.java#L152-L170[mapping] between plugin's type and corresponding `Plugin Broker` image:
+
+.OpenShiftInfraModule.java
+[source,java]
 ----
-id: org.eclipse.che.vscode-sonarlint
-version: 0.0.1
-type: VS Code extension
-name: vscode-sonarlint
-title: Sonarlint code intelligence
-description: VS Code extension that provides sonarlint features
-icon: https://www.eclipse.org/che/images/logo-eclipseche.svg
-attributes:
-  extension: vscode:extension/SonarSource.sonarlint-vscode
-  containerImage: garagatyi/remotetheia:java
-firstPublicationDate: "2019-02-05"
-category: Linter
-publisher: SonarSource
-repository: https://www.sonarlint.org/
-latestUpdateDate: "2019-02-24"
-----
+    MapBinder<String, String> pluginBrokers =
+        MapBinder.newMapBinder(
+            binder(),
+            String.class,
+            String.class,
+            Names.named("che.workspace.plugin_broker.images"));
+    pluginBrokers
+        .addBinding("Che Plugin")
+        .to(Key.get(String.class, Names.named("che.workspace.plugin_broker.image")));
+    pluginBrokers
+        .addBinding("Che Editor")
+        .to(Key.get(String.class, Names.named("che.workspace.plugin_broker.image")));
+    pluginBrokers
+        .addBinding("Theia plugin")
+        .to(Key.get(String.class, Names.named("che.workspace.plugin_broker.theia.image")));
+    pluginBrokers
+        .addBinding("VS Code extension")
+        .to(Key.get(String.class, Names.named("che.workspace.plugin_broker.vscode.image")));
+  }
+---- 
 
-=== Plugin broker activity diagramm 
+CAUTION: This approach with 1:1 mapping between plugin type and `Plugin Broker` implementation on `Che Server` side is likely to be changed in future. In order to make Che even more extendable and provide possibility to create custom plugins with dedicated brokers the picking of the broker might be moved to the `Che Plugin Registry`, so that users will be able to override not only plugins, but also `Plugin Brokers` implementation.
 
-image::images/che-plugin-brokers/plugin_broker_activity_diagramm.svg[width="1640", height="560",aption="Che Plugin Broker activity diagramm"]
-
-=== Plugin brokers in action
-
-image::images/che-plugin-brokers/plugin_broker_pod.png[width="1640", height="230",aption="Che Plugin Broker Pod as init container"]
-
-image::images/che-plugin-brokers/theia_plugin_broker_pod.png[width="1640", height="230",aption="Theia plugin broker pod"]
+Once the required brokers are identified, `Che Server` starts `Plugin Brokers` one by one in the k8s / OpenShift namespace where workspace is going to be created, and waits for the response from `Plugin Broker`:
 
 image::images/che-plugin-brokers/vs_code_plugin_broker_pod.png[width="1640", height="230",aption="VS Code plugin broker pod"]
 
-image::images/che-plugin-brokers/che_workspace_with_sidecars.png[width="1640", height="1000",aption="Che Workspace Pod with sidecars containers"]
+Based on the metada provided by `Che Server`, `Plugin Broker` does the following:
 
-== What are the plugin brokers in general (why plugin brokers are needed) ?
+* downloads and unpacs plugin files (binaries / configuration ) if needed
+* copies plugin files to a workspace if needed
+* finds or generates workspace configuration changes if needed for a plugin.
 
-Che has devPlugin brokers. The purpose of devPlugin brokers is to handle a specific way to install a devPlugin into Che. There are several type of devPlugins that can run on different editors and may be packaged differently. So each cases requires a specific installation.
-At the moment, according to the `type` metadata of the devPlugin, Che would start the right broker and process the specific installation process.
-We have these below devPlugin types and each of them has a broker implementation:
+++4.++ `Plugin Broker` sends workspace configuration changes back to the `Che Server` that need to be applied before the workspace startup (e.g. adding env vars, volumes, editor commands etc.). `Plugin Broker` also sends logs / errors of the stages of its process in order to make the workspace start process more verbose:
 
-- Che-VSCode plug-in
-    - Sidecar containers
-    - A reference to a vscode extension (in the market place)
-- Che plug-in
-    - Sidecar containers
-    - Editor commands
-- Theia plug-in
-    - A .theia file with
-        - The plugin on a che-theia editor
-        - Optionally sidecars container
-- Editor plug-in
-    - A containers with a web app (editor)
-    - Sidecar containers
+image::images/che-plugin-brokers/plugin_broker_logs.png[width="1640", height="430",aption="Plugin Broker logs"]
 
-Each type of plugin have a corresponding broker. Broker install process for each type is describe here: https://github.com/eclipse/che-plugin-broker/blob/master/README.md 
+More detailed flow is available in the following activity diagramm:
 
-== What plugin brokers can do and how they work ?
-- Download binaries and configuration of editors/plugins
-- Generate configuration of editors/plugins including sidecars
-- Unpack files in it is needed for them to be consumed by an editor
-- Send logs of stages of its work to Workspace master to make workspace start more verbose to show why a user waits
-- Send error if something goes wrong
+image::images/che-plugin-brokers/plugin_broker_activity_diagramm.svg[width="1640", height="560",aption="Che Plugin Broker activity diagramm"]
