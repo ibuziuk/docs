@@ -15,7 +15,7 @@ Before diving into the plugin broker concept, it really worth to briefly summari
 
 == Plugin registry
 
-All the plugins are available via the plugin registry - a standalone service which provides the metadata of the available plugins :
+All the plugins are available via the plugin registry - a standalone service which provides the metadata of the available plugins:
 
 .plugins.json
 [source,json]
@@ -64,7 +64,7 @@ NOTE: https://che-plugin-registry.openshift.io is used as the default plugin reg
 
 This metadata is consumed by the Che sever and exposed via the "User Dashboard" for plugin picking during a workspace creation:
 
-image::images/che-plugin-brokers/plugins.png[width="1640", height="480",aption="Plugin selection on User Dashboard"]
+image::images/che-plugin-brokers/plugins.png[width="1640", height="450",aption="Plugin Selection via User Dashboard"]
 
 NOTE: User can select only one `Che Editor Plugin` and multiple `Che`, `VS Code`, `Theia` plugins. Moreover, `Che` /`VS Code` / `Theia` plugin functionality depends on the `Che Editor Plugin` selection. For instance, `VS Code Plugin` will not provide any additional functionality in the Jupyter Notebook, since this plugin type is not honored by the editor. On the other hand, `Theia IDE` editor supports both `VSCode extension` and `Theia` plugins. At the moment there is no smart validation of plugin selection based on the editor type.
 
@@ -114,7 +114,7 @@ CAUTION: Since Che supports plugable editor implementations (Theia, Dirigible, J
 === Plugin Broker Lifecycle
 In this document it is not planned to focus on the implementation details of each broker or/and list defferences between each of them, but rather provide an architectural overview of the `Plugin Broker` concept. Schematic `Plugin Broker Lifecycle` can be represented in the following way:
 
-image::images/che-plugin-brokers/plugin_broker_lifecycle.png[width="1000", height="800",aption="Plugin Broker Lifecycle"]
+image::images/che-plugin-brokers/plugin_broker_lifecycle.png[width="800", height="500",aption="Plugin Broker Lifecycle"]
 
 1. Before the actual workspace startup, `Che Server` makes a request to the `Che Plugin Registry` in order to get the metadata about the plugins which are added to the workspace.
 2. `Che Plugin Registry` provides metadata about the plugins to the `Che Server`.
@@ -148,7 +148,7 @@ CAUTION: This approach with 1:1 mapping between plugin type and `Plugin Broker` 
 
 Once the required brokers are identified, `Che Server` starts `Plugin Brokers` one by one in the k8s / OpenShift namespace where workspace is going to be created, and waits for the response from `Plugin Broker`:
 
-image::images/che-plugin-brokers/vs_code_plugin_broker_pod.png[width="1640", height="230",aption="VS Code plugin broker pod"]
+image::images/che-plugin-brokers/vs_code_plugin_broker_pod.png[width="1640", height="180",aption="VS Code Plugin Broker Pod"]
 
 Based on the metada provided by `Che Server`, `Plugin Broker` does the following:
 
