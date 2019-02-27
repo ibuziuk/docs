@@ -13,7 +13,7 @@ Before diving into the plugin broker concept, it really worth to briefly summari
 * Theia Plugin
 ** sidecar container (can be also run in the main theia container) which extends the functionality of the che-theia editor
 
-== Plugin registry
+== Plugin Registry
 
 All the plugins are available via the plugin registry - a standalone service which provides the metadata of the available plugins:
 
@@ -94,7 +94,7 @@ TIP: `containerImage` attribute specifies the image that would be used for runni
 
 More information about the plugin registry can be found in the README.md of the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] repository.
 
-== Plugin brokers
+== Plugin Brokers
 Now, when the `Plugin` and `Plugin Registry` have been discussed, it is high time to introduce the `Plugin Broker` concept.
 
 **Plugin Broker** - is an application that runs just before the actual workspace start phase and based on the received plugin metadata deliveries the plugin binaries to the workspace containers, and sends workspace configuration changes to the `Che Server` that are needed to be applied before the workspace startup.
