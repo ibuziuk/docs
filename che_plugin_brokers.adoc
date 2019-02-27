@@ -160,6 +160,6 @@ Based on the metada provided by `Che Server`, `Plugin Broker` does the following
 
 image::images/che-plugin-brokers/plugin_broker_logs.png[width="1640", height="430",aption="Plugin Broker logs"]
 
-More detailed flow is available in the following activity diagramm:
+More detailed flow is available in the following activity diagram:
 
-image::images/che-plugin-brokers/plugin_broker_activity_diagramm.svg[width="1640", height="560",aption="Che Plugin Broker activity diagramm"]
+image::images/che-plugin-brokers/plugin_broker_activity_diagram.svg[width="1640", height="560",aption="Che Plugin Broker activity diagram"]
