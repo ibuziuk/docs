@@ -90,11 +90,9 @@ repository: https://www.sonarlint.org/
 latestUpdateDate: "2019-02-24"
 ----
 
-TIP: `meta.yaml` format will be discussed in the more details in the `Plugin Broker Lifecycle` section.
-
 TIP: `containerImage` attribute specifies the image that would be used for running the plugin as a sidecar container. If the `containerImage` attribute is not specified, the plugin will be running in side of the Theia container.
 
-More information about the plugin registry can be found in the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] README.md
+More information about the plugin registry can be found in the README.md of the https://github.com/eclipse/che-plugin-registry[che-plugin-registry] repository.
 
 == Plugin brokers
 Now when we have a discussed the `Plugin` and `Plugin Registry` it is high time to introduce the `Plugin Broker` concept.
@@ -114,7 +112,7 @@ CAUTION: Since Che supports plugable editor implementations (Theia, Dirigible, J
 === Plugin Broker Lifecycle
 In this document it is not planned to focus on the implementation details of each broker or/and list defferences between each of them, but rather provide an architectural overview of the `Plugin Broker` concept. Schematic `Plugin Broker Lifecycle` can be represented in the following way:
 
-image::images/che-plugin-brokers/plugin_broker_lifecycle.png[width="800", height="500",aption="Plugin Broker Lifecycle"]
+image::images/che-plugin-brokers/plugin_broker_lifecycle.png[width="800", height="560",aption="Plugin Broker Lifecycle"]
 
 1. Before the actual workspace startup, `Che Server` makes a request to the `Che Plugin Registry` in order to get the metadata about the plugins which are added to the workspace.
 2. `Che Plugin Registry` provides metadata about the plugins to the `Che Server`.
@@ -148,7 +146,7 @@ CAUTION: This approach with 1:1 mapping between plugin type and `Plugin Broker` 
 
 Once the required brokers are identified, `Che Server` starts `Plugin Brokers` one by one in the k8s / OpenShift namespace where workspace is going to be created, and waits for the response from `Plugin Broker`:
 
-image::images/che-plugin-brokers/vs_code_plugin_broker_pod.png[width="1640", height="180",aption="VS Code Plugin Broker Pod"]
+image::images/che-plugin-brokers/vs_code_plugin_broker_pod.png[width="1640", height="160",aption="VS Code Plugin Broker Pod"]
 
 Based on the metada provided by `Che Server`, `Plugin Broker` does the following:
 
