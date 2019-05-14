@@ -1,0 +1,21 @@
+== Zabbix
+
+CNCF ?
+Prometheus metric support
+graphana visualization is better atm
+
+== OpenShift on Azure
+
+az openshift create \o/
+
+SLA - 99,9 %
+what exactly SLA is for OpenShift on Azure
+no PaaS provide route acceassibility?
+
+etcd - sourse of truth in k8s / OpenShift
+
+OpenShift 4 - CRW is a feature
+
+== MySQL innoDB cluster
+
+== 
