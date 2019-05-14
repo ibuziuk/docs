@@ -16,6 +16,13 @@ etcd - sourse of truth in k8s / OpenShift
 
 OpenShift 4 - CRW is a feature
 
-== MySQL innoDB cluster
+== Container runtime security with Sysdig
 
-== 
+- Falco - sandbox project of CNCF - https://falco.org/
+- Anomaly detection
+- Containers are isolated processes
+- Congtainer images are immutable
+- Anomally detection
+- ssh to the container is a bad habbit
+- Sysdig / Falco
+- Enterprice Falco with Sysdig Secure
